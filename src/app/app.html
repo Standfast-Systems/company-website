@@ -1,0 +1,78 @@
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a routerLink="/" class="brand-link" (click)="closeMenu()">
+      <img src="assets/brand/Standfast_Logo_primary.svg" alt="Standfast Systems" />
+    </a>
+    <button
+      type="button"
+      class="nav-toggle"
+      (click)="toggleMenu()"
+      [attr.aria-expanded]="menuOpen()"
+      aria-controls="site-nav"
+    >
+      Menu
+    </button>
+    <nav id="site-nav" class="site-nav" [class.open]="menuOpen()" aria-label="Main navigation">
+      <ul>
+        <li>
+          <a
+            routerLink="/"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            ariaCurrentWhenActive="page"
+            (click)="closeMenu()"
+            >Home</a
+          >
+        </li>
+        <li>
+          <a routerLink="/about" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeMenu()">About</a>
+        </li>
+        <li>
+          <a
+            routerLink="/capabilities"
+            routerLinkActive="active"
+            ariaCurrentWhenActive="page"
+            (click)="closeMenu()"
+            >Capabilities</a
+          >
+        </li>
+        <li>
+          <a routerLink="/insights" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeMenu()"
+            >Insights</a
+          >
+        </li>
+        <li>
+          <a routerLink="/vehicles" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeMenu()"
+            >Vehicles</a
+          >
+        </li>
+        <li>
+          <a routerLink="/contact" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeMenu()"
+            >Contact</a
+          >
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+  <router-outlet />
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div>
+      <img src="assets/brand/Standfast_Logo_lockup.svg" alt="Standfast Systems. Always forward." />
+    </div>
+    <ul class="footer-links">
+      <li><a href="mailto:ccastor@standfastsystems.com">ccastor&#64;standfastsystems.com</a></li>
+      <li>
+        <a href="https://www.linkedin.com/company/standfast-systems" rel="noopener">LinkedIn</a>
+      </li>
+    </ul>
+    <p>&copy; {{ year }} Standfast Systems, LLC. Always forward.</p>
+  </div>
+</footer>
