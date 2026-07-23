@@ -1,0 +1,94 @@
+<section class="section">
+  <div class="container">
+    @if (d(); as d) {
+      <p class="crumbs"><a [routerLink]="['/vehicles', slug()]">&larr; {{ d.vehicle }}</a></p>
+      <h1 class="section-title">
+        @if (company()) { {{ company() }} on {{ d.vehicle }} }
+        @else if (subFilter()) { Orders whose team includes {{ subFilter() }} }
+        @else { All {{ d.vehicle }} orders }
+      </h1>
+      <div class="vt-toolbar">
+        <p class="lead">{{ rows().length }} orders &middot; {{ fmtMoney(total()) }}</p>
+        <label class="visually-hidden" for="order-search">Search orders</label>
+        <input
+          id="order-search"
+          type="text"
+          placeholder="search description / order / company&hellip;"
+          [ngModel]="q()"
+          (ngModelChange)="q.set($event)"
+        />
+      </div>
+
+      <div class="table-scroll">
+        <table class="vt">
+          <thead>
+            <tr>
+              @if (!company()) { <th scope="col">Company</th> }
+              <th scope="col">Order</th>
+              <th scope="col" class="num">Amount</th>
+              <th scope="col">Period</th>
+              <th scope="col">Description</th>
+              <th scope="col" class="num">Team</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (o of rows(); track o.piid) {
+              <tr class="clickable" (click)="drawer.set(o)">
+                @if (!company()) { <td class="title">{{ o.company }}</td> }
+                <td>
+                  <button type="button" class="linklike" (click)="drawer.set(o); $event.stopPropagation()">
+                    {{ o.piid }}
+                  </button>
+                </td>
+                <td class="num">{{ fmtMoney(o.amount) }}</td>
+                <td class="muted">{{ o.start_date }} &rarr; {{ o.end_date }}</td>
+                <td class="muted title">{{ o.description }}</td>
+                <td class="num">
+                  @if (pod(o).length) { <span class="badge-team">{{ pod(o).length }} subs</span> }
+                </td>
+              </tr>
+            } @empty {
+              <tr><td colspan="6" class="muted vt-empty">No orders match.</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      @if (drawer(); as o) {
+        <div class="vt-backdrop" (click)="drawer.set(null)"></div>
+        <div class="vt-drawer" role="dialog" aria-label="Order delivery team">
+          <h2>{{ o.company }}: {{ o.piid }}</h2>
+          <p class="muted">{{ o.description }}</p>
+          <div class="vt-kv">
+            <div>Amount</div><div>{{ fmtMoney(o.amount) }}</div>
+            <div>Period</div><div>{{ o.start_date }} &rarr; {{ o.end_date }}</div>
+            <div>Type</div><div>{{ o.award_type }}</div>
+          </div>
+          <h3>Delivery team ({{ pod(o).length }})</h3>
+          @if (pod(o).length) {
+            <table class="vt">
+              <thead><tr><th scope="col">Subcontractor</th><th scope="col" class="num">$</th><th scope="col">Latest action</th></tr></thead>
+              <tbody>
+                @for (s of pod(o); track s.sub_name) {
+                  <tr>
+                    <td class="title">{{ s.sub_name }}</td>
+                    <td class="num">{{ fmtMoney(s.amount) }}</td>
+                    <td class="muted">{{ s.action_date }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+            <p class="note">Subcontract values as reported to FSRS (lags roughly 12 months).</p>
+          } @else {
+            <p class="muted">No subcontractors reported: the prime delivers this in-house.</p>
+          }
+          <p><button type="button" class="linklike" (click)="drawer.set(null)">Close</button></p>
+        </div>
+      }
+    } @else if (err()) {
+      <div class="banner-err" role="alert">{{ err() }}</div>
+    } @else {
+      <p class="muted">Loading vehicle data&hellip;</p>
+    }
+  </div>
+</section>

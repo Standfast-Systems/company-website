@@ -1,19 +1,52 @@
 <section class="section">
   <div class="container">
-    <h1 class="section-title">Federal Vehicle Landscape<span class="badge">Coming soon</span></h1>
-    <div class="prose">
-      <p>
-        A fast, visual map of federal contract vehicles relevant to health-IT work: who holds them, where they
-        run, and how they connect. Built as a static, data-backed tool with no accounts and no tracking.
-      </p>
-      <p class="muted">
-        The tool is in final preparation and will launch on this page. In the meantime, our
-        <a href="https://www.linkedin.com/pulse/patient-shouldnt-integration-layer-christopher-castor-ayvie/" rel="noopener"
-          >launch thesis</a
-        >
-        covers the thinking behind our work, and the
-        <a routerLink="/capabilities">capabilities page</a> has our quick facts for contracting.
-      </p>
+    <h1 class="section-title">Federal Vehicle Landscape</h1>
+    <p class="lead">
+      Federal contract vehicles from public USAspending data: every seat, every task order, and the
+      subcontractor teams that actually deliver the work. Click a vehicle to see its landscape.
+    </p>
+
+    @if (err()) { <div class="banner-err" role="alert">{{ err() }}</div> }
+
+    <div class="table-scroll">
+      <table class="vt">
+        <thead>
+          <tr>
+            <th scope="col">Vehicle</th>
+            <th scope="col" class="num">Orders</th>
+            <th scope="col" class="num">Primes</th>
+            <th scope="col" class="num">Total $</th>
+            <th scope="col" class="num">Active</th>
+            <th scope="col" class="num">$ &rarr; subs</th>
+            <th scope="col" class="num">Teams mapped</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (v of rows(); track v.slug) {
+            <tr class="clickable" (click)="open(v)">
+              <td class="title">
+                <a [routerLink]="['/vehicles', v.slug]" (click)="$event.stopPropagation()">{{ v.vehicle }}</a>
+              </td>
+              <td class="num">{{ v.orders_n }}</td>
+              <td class="num">{{ v.primes }}</td>
+              <td class="num">{{ fmtMoney(v.total) }}</td>
+              <td class="num">{{ v.active || '' }}</td>
+              <td class="num">{{ v.sub_flow ? fmtMoney(v.sub_flow) : '' }}</td>
+              <td class="num muted">{{ v.pods_mapped || '' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
     </div>
+    @if (generatedAt()) {
+      <p class="note">
+        Snapshot generated {{ generatedAt() }}. "$ &rarr; subs" is FSRS-reported subcontract value.
+        "Teams mapped" counts orders whose subcontractor teams have been pulled from FSRS.
+      </p>
+    }
+    <p class="note">
+      Data: USAspending.gov. FSRS subaward reporting lags roughly 12 months; subcontract values are
+      reported ceilings and can exceed obligations to date. Free to use.
+    </p>
   </div>
 </section>

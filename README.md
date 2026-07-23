@@ -42,11 +42,13 @@ IMPORTANT: leave the existing Google Workspace MX records untouched. Only add th
 
 ## Data refresh (Federal Vehicle Landscape)
 
-The `/vehicles` route is a "coming soon" placeholder in v1. The real tool is a phase-2 fast follow, backed by a pre-generated static JSON asset:
+The `/vehicles` routes are the live Federal Vehicle Landscape tool (list, per-vehicle detail, orders + delivery-team drawer), backed by the static snapshot under `public/data/` (`vehicles.json` + `vehicle/<slug>.json`). The data-generation pipeline lives outside this repo on purpose; only the baked JSON ships, and the exporter is purity-tested so non-public fields cannot appear in it.
 
-- The data-generation scripts live outside this repo on purpose; only the baked JSON ships.
-- When integrating, drop the JSON under `public/assets/data/` and replace the placeholder template in `src/app/pages/vehicles/`.
-- To refresh data later, regenerate the JSON offline, replace the asset, and push to `main`.
+To refresh the data:
+
+1. In the private `opp-tracker` repo, re-run the crawls, then `npm run export:landscape` (writes into the sibling `vehicle-landscape/public/data`).
+2. Copy that `data/` folder over this repo's `public/data/`.
+3. Push to `main`; the deploy workflow rebuilds and prerenders one page per vehicle slug automatically (slugs are read from `vehicles.json` at build time).
 
 ## Content guardrails
 

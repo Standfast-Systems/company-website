@@ -4,6 +4,8 @@ import { AboutPage } from './pages/about/about';
 import { CapabilitiesPage } from './pages/capabilities/capabilities';
 import { InsightsPage } from './pages/insights/insights';
 import { VehiclesPage } from './pages/vehicles/vehicles';
+import { VehicleDetailPage } from './pages/vehicles/vehicle-detail';
+import { VehicleOrdersPage } from './pages/vehicles/vehicle-orders';
 import { ContactPage } from './pages/contact/contact';
 import { NotFoundPage } from './pages/not-found/not-found';
 
@@ -31,6 +33,16 @@ export const routes: Routes = [
   {
     path: 'vehicles',
     component: VehiclesPage,
+    title: 'Federal Vehicle Landscape | Standfast Systems',
+  },
+  {
+    path: 'vehicles/:slug',
+    component: VehicleDetailPage,
+    title: 'Federal Vehicle Landscape | Standfast Systems',
+  },
+  {
+    path: 'vehicles/:slug/orders',
+    component: VehicleOrdersPage,
     title: 'Federal Vehicle Landscape | Standfast Systems',
   },
   {

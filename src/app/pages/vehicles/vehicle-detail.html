@@ -1,0 +1,96 @@
+<section class="section">
+  <div class="container">
+    @if (d(); as d) {
+      <p class="crumbs"><a routerLink="/vehicles">&larr; All vehicles</a></p>
+      <h1 class="section-title">{{ d.vehicle }}</h1>
+      <p class="lead">
+        {{ d.primes }} primes &middot; {{ d.orders_n }} orders &middot; {{ fmtMoney(d.total) }} total &middot;
+        {{ fmtMoney(d.sub_flow) }} flowed to subcontractors
+      </p>
+
+      <h2>Seats: the primes</h2>
+      <div class="table-scroll">
+        <table class="vt">
+          <thead>
+            <tr>
+              <th scope="col">Company</th>
+              <th scope="col" class="num">Orders</th>
+              <th scope="col" class="num">Active</th>
+              <th scope="col" class="num">Total $</th>
+              <th scope="col" class="num">$ &rarr; subs</th>
+              <th scope="col" class="num">Sub share</th>
+              <th scope="col">First &rarr; latest order</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (s of d.seats; track s.company) {
+              <tr class="clickable" (click)="openSeat(s.company)">
+                <td class="title">
+                  <a
+                    [routerLink]="['/vehicles', slug(), 'orders']"
+                    [queryParams]="{ company: s.company }"
+                    (click)="$event.stopPropagation()"
+                    >{{ s.company }}</a
+                  >
+                </td>
+                <td class="num">{{ s.orders_n }}</td>
+                <td class="num">{{ s.active || '' }}</td>
+                <td class="num">{{ fmtMoney(s.total) }}</td>
+                <td class="num">{{ s.subbed_out ? fmtMoney(s.subbed_out) : '' }}</td>
+                <td class="num muted">{{ pct(s.subbed_out, s.total) }}</td>
+                <td class="muted">{{ s.first_order }} &rarr; {{ s.latest_order }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="note">
+        A high sub share means the prime builds delivery teams: the clearest signal of where
+        subcontracting capacity is welcome.
+      </p>
+
+      @if (d.top_subs.length) {
+        <h2>Teaming tier: who the primes bring in</h2>
+        <div class="table-scroll">
+          <table class="vt">
+            <thead>
+              <tr>
+                <th scope="col">Subcontractor</th>
+                <th scope="col" class="num">Sub $</th>
+                <th scope="col" class="num">Teams</th>
+                <th scope="col" class="num">Primes worked under</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (s of d.top_subs; track s.sub_name) {
+                <tr class="clickable" (click)="openSub(s.sub_name)">
+                  <td class="title">
+                    <a
+                      [routerLink]="['/vehicles', slug(), 'orders']"
+                      [queryParams]="{ sub: s.sub_name }"
+                      (click)="$event.stopPropagation()"
+                      >{{ s.sub_name }}</a
+                    >
+                  </td>
+                  <td class="num">{{ fmtMoney(s.total) }}</td>
+                  <td class="num">{{ s.pods }}</td>
+                  <td class="num">{{ s.primes }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        <p class="note">
+          A sub appearing under several primes is the strongest teaming signal on the vehicle:
+          capability that multiple integrators independently chose.
+        </p>
+      } @else {
+        <p class="note">No subcontractor teams mapped for this vehicle yet.</p>
+      }
+    } @else if (err()) {
+      <div class="banner-err" role="alert">{{ err() }}</div>
+    } @else {
+      <p class="muted">Loading vehicle data&hellip;</p>
+    }
+  </div>
+</section>

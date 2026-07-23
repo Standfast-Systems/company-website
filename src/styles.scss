@@ -470,3 +470,183 @@ ul.checklist li::before {
     scroll-behavior: auto;
   }
 }
+
+/* Vehicle Landscape tool */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.crumbs {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+}
+
+.table-scroll {
+  overflow-x: auto;
+  margin-top: 1.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-surface);
+}
+
+table.vt {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+table.vt th,
+table.vt td {
+  text-align: left;
+  padding: 0.6rem 0.9rem;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: top;
+}
+
+table.vt tbody tr:last-child td {
+  border-bottom: none;
+}
+
+table.vt th {
+  color: var(--color-gray);
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+table.vt tbody tr.clickable {
+  cursor: pointer;
+}
+
+table.vt tbody tr:hover td {
+  background: #1a1a1a;
+}
+
+table.vt .num {
+  text-align: right;
+  white-space: nowrap;
+}
+
+table.vt .title {
+  max-width: 32rem;
+}
+
+table.vt td.title,
+table.vt td.title a {
+  color: var(--color-white);
+  font-weight: 500;
+}
+
+.vt-empty {
+  padding: 1.5rem;
+}
+
+.note {
+  color: var(--color-gray);
+  font-size: 0.85rem;
+  margin: 0.75rem 0 0;
+  max-width: 46rem;
+}
+
+.banner-err {
+  margin: 1rem 0;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid #e06565;
+  border-radius: 7px;
+  color: #e06565;
+  font-size: 0.9rem;
+}
+
+.badge-team {
+  display: inline-block;
+  padding: 0.1rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  border: 1px solid var(--color-accent);
+  color: var(--color-accent);
+  white-space: nowrap;
+}
+
+.vt-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.vt-toolbar .lead {
+  margin-bottom: 0;
+}
+
+.vt-toolbar input {
+  font: inherit;
+  color: var(--color-light);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 7px;
+  padding: 0.45rem 0.7rem;
+  min-width: 240px;
+}
+
+button.linklike {
+  background: none;
+  border: none;
+  color: var(--color-accent);
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
+button.linklike:hover {
+  text-decoration: underline;
+}
+
+.vt-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 60;
+}
+
+.vt-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: min(560px, 94vw);
+  background: var(--color-surface);
+  border-left: 1px solid var(--color-border);
+  overflow: auto;
+  z-index: 70;
+  padding: 1.5rem;
+}
+
+.vt-drawer h2 {
+  font-size: 1.05rem;
+  margin: 0 0 0.3rem;
+}
+
+.vt-drawer h3 {
+  margin-top: 1.25rem;
+}
+
+.vt-kv {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 0.25rem 0.75rem;
+  font-size: 0.9rem;
+  margin: 0.75rem 0;
+}
+
+.vt-kv div:nth-child(odd) {
+  color: var(--color-gray);
+}
