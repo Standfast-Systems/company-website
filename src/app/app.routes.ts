@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { HomePage } from './pages/home/home';
 import { AboutPage } from './pages/about/about';
 import { CapabilitiesPage } from './pages/capabilities/capabilities';
+import { CaseStudiesPage } from './pages/case-studies/case-studies';
 import { InsightsPage } from './pages/insights/insights';
 import { VehiclesPage } from './pages/vehicles/vehicles';
 import { VehicleDetailPage } from './pages/vehicles/vehicle-detail';
@@ -24,6 +25,11 @@ export const routes: Routes = [
     path: 'capabilities',
     component: CapabilitiesPage,
     title: 'Capabilities | Standfast Systems',
+  },
+  {
+    path: 'case-studies',
+    component: CaseStudiesPage,
+    title: 'Case study: Prior authorization gateway | Standfast Systems',
   },
   {
     path: 'insights',
