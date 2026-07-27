@@ -9,10 +9,18 @@ import { RouterLink } from '@angular/router';
 })
 export class CaseStudiesPage {
   constructor() {
-    inject(Meta).updateTag({
-      name: 'description',
-      content:
-        'Case study: a FHIR to X12 prior authorization gateway built to Da Vinci PAS 2.0.1, the version named by CMS-0057-F, and verified against the Inferno Da Vinci PAS Test Kit.',
-    });
+    const meta = inject(Meta);
+    const title = 'Prior authorization, translated | Standfast Systems';
+    const description =
+      'A FHIR to X12 prior authorization gateway built to Da Vinci PAS 2.0.1, the version named by CMS-0057-F, and verified against the Inferno PAS test kit: 11 passing tests to 39 without modifying the payer.';
+    const image = 'https://standfastsystems.com/assets/case-studies/conformance-board.png';
+
+    meta.updateTag({ name: 'description', content: description });
+    meta.updateTag({ property: 'og:title', content: title });
+    meta.updateTag({ property: 'og:description', content: description });
+    meta.updateTag({ property: 'og:image', content: image });
+    meta.updateTag({ property: 'og:url', content: 'https://standfastsystems.com/case-studies' });
+    meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+    meta.updateTag({ name: 'twitter:image', content: image });
   }
 }

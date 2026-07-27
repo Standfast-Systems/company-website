@@ -8,7 +8,17 @@
       payer itself.
     </p>
 
-    <dl class="facts">
+    <img
+      src="assets/case-studies/conformance-board.png"
+      alt="Conformance board: HL7 reference payer alone scores 11 pass, 25 fail, 16 errors. Adding
+        gateway corrections scores 27 pass, 20 fail, 0 errors. Adding simulated payer-internals
+        enrichment scores 39 pass, 8 fail, 0 errors."
+      width="2360"
+      height="1010"
+      style="width: 100%; height: auto; border: 1px solid var(--color-border); border-radius: 10px"
+    />
+
+    <dl class="facts" style="margin-top: 2rem">
       <div>
         <dt>Standard</dt>
         <dd>Da Vinci PAS FHIR IG 2.0.1</dd>
@@ -143,8 +153,10 @@
 
     <p class="note">
       Inferno Da Vinci PAS Test Kit, server suite v2.0.1, run against the gateway in front of HL7's
-      unmodified reference payer. Counts include parent group rows, so a single finding can appear
-      more than once.
+      unmodified reference payer. The eight remaining failures are three findings plus five parent
+      group rows that inherit them: two trace to a conflict inside PAS 2.0.1 itself, described
+      below, and one is a deliberate trade in how the pended workflow is timed, since the
+      notification tests and the inquiry tests want the same claim in opposite states.
     </p>
   </div>
 </section>
@@ -186,9 +198,11 @@
         validation, and omitting it fails the must-support check.
       </p>
       <p>
-        Each one is an issue HL7 has already logged and corrected, but only in releases that come
-        after 2.0.1, which is the version CMS-0057-F names. A payer building to the letter of the
-        rule inherits them.
+        Each one is already logged with HL7 and corrected, but only in releases that come after
+        2.0.1, which is the version CMS-0057-F names. A payer building to the letter of the rule
+        inherits them. Note that HL7 triaged the first as a validator behavior and the other two as
+        guide corrections, which is a distinction worth having before an integration team spends a
+        week deciding whose bug it is.
       </p>
       <ul class="checklist">
         <li>
