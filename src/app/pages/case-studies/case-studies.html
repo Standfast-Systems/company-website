@@ -107,6 +107,28 @@
         </p>
       </div>
     </div>
+
+    <img
+      src="assets/case-studies/demo-lifecycle.png"
+      alt="The demo running a prior authorization for home oxygen with clinical documentation. Every
+        stage reports OK: submit, translate 278, conform, 275 docs, payer adjudicate, shim, enrich,
+        translate back. The lifecycle shows submitted, then payer review pended, then a granted
+        decision."
+      width="1700"
+      height="582"
+      style="
+        width: 100%;
+        height: auto;
+        margin-top: 2rem;
+        border: 1px solid var(--color-border);
+        border-radius: 10px;
+      "
+    />
+    <p class="note">
+      One request moving through the gateway. Each stage reports its own result, so a failure is
+      attributable to a step rather than to the system as a whole, and the layer selector at the top
+      switches between the raw payer response, the corrected response, and the enriched response.
+    </p>
   </div>
 </section>
 
