@@ -13,7 +13,7 @@ export class CaseStudiesPage {
     const title = 'Prior authorization, translated | Standfast Systems';
     const description =
       'A FHIR to X12 prior authorization gateway built to Da Vinci PAS 2.0.1, the version named by CMS-0057-F, and verified against the Inferno PAS test kit: 11 passing tests to 39 without modifying the payer.';
-    const image = 'https://standfastsystems.com/assets/case-studies/conformance-board.png';
+    const image = 'https://standfastsystems.com/assets/case-studies/conformance-board-v2.png';
 
     meta.updateTag({ name: 'description', content: description });
     meta.updateTag({ property: 'og:title', content: title });
