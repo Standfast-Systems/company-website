@@ -10,7 +10,7 @@ export class InsightsPage {
     inject(Meta).updateTag({
       name: 'description',
       content:
-        'Long-form thinking from Standfast Systems. Start with our launch thesis: The Patient Shouldn\'t Be the Integration Layer.',
+        'Long-form thinking from Standfast Systems on health-IT interoperability and modernization: The Domain Engineer, A PDF and a Prayer, and The Patient Shouldn\'t Be the Integration Layer.',
     });
   }
 }
