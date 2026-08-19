@@ -1,269 +1,41 @@
 <section class="section">
   <div class="container">
-    <p class="eyebrow">Case study</p>
-    <h1 class="section-title">Prior authorization, translated</h1>
+    <p class="eyebrow">Case studies</p>
+    <h1 class="section-title">Working proof</h1>
     <p class="lead">
-      We put a conformance gateway in front of an unmodified legacy payer and took it from 11
-      passing tests to 39 on the official Da Vinci PAS test suite, without changing a line of the
-      payer itself.
+      Every case study here is a running artifact: a clean-room prototype built on open standards
+      and synthetic data, judged by the same tests a reviewer would run, with its limits stated
+      next to its results.
     </p>
-
-    <img
-      src="assets/case-studies/conformance-board-v4.png"
-      alt="Conformance board: HL7 reference payer alone scores 11 pass, 25 fail, 16 errors. Adding
-        gateway corrections scores 27 pass, 20 fail, 0 errors. Adding simulated payer-internals
-        enrichment scores 39 pass, 8 fail, 0 errors."
-      width="2360"
-      height="1010"
-      style="width: 100%; height: auto; border: 1px solid var(--color-border); border-radius: 10px"
-    />
-
-    <dl class="facts" style="margin-top: 2rem">
-      <div>
-        <dt>Standard</dt>
-        <dd>Da Vinci PAS FHIR IG 2.0.1</dd>
-      </div>
-      <div>
-        <dt>Regulation</dt>
-        <dd>CMS-0057-F</dd>
-      </div>
-      <div>
-        <dt>Verified with</dt>
-        <dd>Inferno Da Vinci PAS Test Kit</dd>
-      </div>
-      <div>
-        <dt>Work type</dt>
-        <dd>Standfast internal research</dd>
-      </div>
-    </dl>
-  </div>
-</section>
-
-<section class="section" aria-labelledby="problem">
-  <div class="container">
-    <h2 id="problem" class="section-title">The problem</h2>
-    <div class="prose">
-      <p>
-        CMS-0057-F requires payers to expose prior authorization through FHIR APIs built to the Da
-        Vinci PAS implementation guide. The systems that actually make those authorization decisions
-        are X12 systems, many of them decades old, and replacing them is not on the table.
-      </p>
-      <p>
-        So the useful question is not whether a payer can rewrite utilization management. It is
-        whether a translation layer can put a conformant FHIR face on the system a payer already
-        runs, and prove it against the same test suite a regulator would point at.
-      </p>
-      <p>
-        We built that layer against public reference implementations: HL7's Da Vinci prior
-        authorization reference payer as the stand-in for the legacy system, and the Inferno test
-        kit as the judge.
-      </p>
-    </div>
-  </div>
-</section>
-
-<section class="section" aria-labelledby="built">
-  <div class="container">
-    <h2 id="built" class="section-title">What the gateway does</h2>
-    <p class="lead">Five jobs, each one a thing a real payer bridge has to handle.</p>
 
     <div class="card-grid">
       <div class="card">
-        <h3>Fails closed</h3>
+        <h3>Prior authorization, translated</h3>
         <p>
-          Non-conformant requests are quarantined before the payer is ever contacted, and answered
-          with both a FHIR OperationOutcome and an X12 rejection that names the failing rule.
+          A conformance gateway in front of an unmodified legacy payer took it from 11 passing
+          tests to 39 on the official Da Vinci PAS suite, without changing a line of the payer
+          itself.
         </p>
+        <div class="btn-row" style="margin-top: 1.5rem">
+          <a class="btn btn-secondary" routerLink="/case-studies/prior-auth-gateway"
+            >Read the case study</a
+          >
+        </div>
       </div>
       <div class="card">
-        <h3>Speaks X12</h3>
+        <h3>Zero errors, wrong twice</h3>
         <p>
-          Every prior authorization exchange is rendered as an X12 278 request and response, with a
-          275 for supporting documentation, mapped segment by segment back to the FHIR elements they
-          came from.
+          A FHIR ChargeItem billing pipeline logged 412 accepted and zero errors. Full-volume
+          reconciliation against the source ledger found the unbilled treatment and the duplicate
+          charge it got wrong anyway.
         </p>
-      </div>
-      <div class="card">
-        <h3>Corrects the response</h3>
-        <p>
-          The legacy payer's replies are brought up to profile conformance on the way out: review
-          action codes, identifier systems, required elements. Every correction is listed, not
-          silently applied.
-        </p>
-      </div>
-      <div class="card">
-        <h3>Surfaces internal data</h3>
-        <p>
-          Member demographics, provider directory records, and documentation requests are pulled
-          from payer systems the FHIR layer never exposed. This is what the mandate actually asks of
-          payers: make existing data reachable.
-        </p>
-      </div>
-      <div class="card">
-        <h3>Closes the loop</h3>
-        <p>
-          Pended decisions notify the requester, with the gateway repairing the notification the
-          legacy system could not send correctly on its own.
-        </p>
+        <div class="btn-row" style="margin-top: 1.5rem">
+          <a class="btn btn-secondary" routerLink="/case-studies/chargeitem-reconciliation"
+            >Read the case study</a
+          >
+        </div>
       </div>
     </div>
-
-    <img
-      src="assets/case-studies/demo-lifecycle.png"
-      alt="The demo running a prior authorization for home oxygen with clinical documentation. Every
-        stage reports OK: submit, translate 278, conform, 275 docs, payer adjudicate, shim, enrich,
-        translate back. The lifecycle shows submitted, then payer review pended, then a granted
-        decision."
-      width="1700"
-      height="582"
-      style="
-        width: 100%;
-        height: auto;
-        margin-top: 2rem;
-        border: 1px solid var(--color-border);
-        border-radius: 10px;
-      "
-    />
-    <p class="note">
-      One request moving through the gateway. Each stage reports its own result, so a failure is
-      attributable to a step rather than to the system as a whole, and the layer selector at the top
-      switches between the raw payer response, the corrected response, and the enriched response.
-    </p>
-  </div>
-</section>
-
-<section class="section" aria-labelledby="results">
-  <div class="container">
-    <h2 id="results" class="section-title">Results</h2>
-    <p class="prose">
-      Same payer, same test suite, same request bundles. The only variable between rows is how much
-      of the gateway is switched on.
-    </p>
-
-    <div class="table-scroll">
-      <table class="vt">
-        <thead>
-          <tr>
-            <th>Configuration</th>
-            <th class="num">Pass</th>
-            <th class="num">Fail</th>
-            <th class="num">Errors</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="title">Reference payer alone</td>
-            <td class="num">11</td>
-            <td class="num">25</td>
-            <td class="num">16</td>
-          </tr>
-          <tr>
-            <td class="title">Gateway corrections only</td>
-            <td class="num">27</td>
-            <td class="num">20</td>
-            <td class="num">0</td>
-          </tr>
-          <tr>
-            <td class="title">Corrections plus simulated internal-systems data</td>
-            <td class="num">39</td>
-            <td class="num">8</td>
-            <td class="num">0</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <p class="note">
-      Inferno Da Vinci PAS Test Kit, server suite v2.0.1, run against the gateway in front of HL7's
-      unmodified reference payer. The eight remaining failures are three findings plus five parent
-      group rows that inherit them: two trace to a conflict inside PAS 2.0.1 itself, described
-      below, and one is a deliberate trade in how the pended workflow is timed, since the
-      notification tests and the inquiry tests want the same claim in opposite states.
-    </p>
-  </div>
-</section>
-
-<section class="section" aria-labelledby="honesty">
-  <div class="container">
-    <h2 id="honesty" class="section-title">Where the line is</h2>
-    <div class="prose">
-      <p>
-        The third row deserves its caveat stated plainly, because the distinction is the whole point
-        of the architecture.
-      </p>
-      <p>
-        <strong>Corrections</strong> fix the format of what the payer already said. Nothing is
-        invented. <strong>Enrichment</strong> adds data that lives in a payer's internal systems,
-        member eligibility, provider directory, utilization management, but that its FHIR layer
-        never exposed. In this build those systems are simulated by a configuration file. In a real
-        deployment they are live integrations, and the data already exists inside the payer. That is
-        precisely what the rule asks payers to make reachable.
-      </p>
-      <p>
-        The demo keeps the three layers visually distinct at the field level, so anyone reading a
-        response can tell which values came from the payer, which were corrected, and which came
-        from a simulated internal system. A board that reads as fully green without that boundary
-        drawn next to it would be telling a story the artifact cannot support.
-      </p>
-    </div>
-  </div>
-</section>
-
-<section class="section" aria-labelledby="findings">
-  <div class="container">
-    <h2 id="findings" class="section-title">What we found in the standard</h2>
-    <div class="prose">
-      <p>
-        The remaining failures turned out not to be ours. Running strict, version-pinned validation
-        surfaced places where PAS 2.0.1 contradicts itself: a profile requires an extension at a
-        location that the same package's definition of that extension forbids. Any value fails
-        validation, and omitting it fails the must-support check.
-      </p>
-      <p>
-        Each one is already logged with HL7 and corrected, but only in releases that come after
-        2.0.1, which is the version CMS-0057-F names. A payer building to the letter of the rule
-        inherits them. Note that HL7 triaged the first as a validator behavior and the other two as
-        guide corrections, which is a distinction worth having before an integration team spends a
-        week deciding whose bug it is.
-      </p>
-      <ul class="checklist">
-        <li>
-          <a href="https://jira.hl7.org/browse/FHIR-46543" rel="noopener">FHIR-46543</a>: validator
-          rejects the communicatedDiagnosis extension where the profile slices it. Corrected in
-          2.1.0.
-        </li>
-        <li>
-          <a href="https://jira.hl7.org/browse/FHIR-51464" rel="noopener">FHIR-51464</a>: context of
-          use adjusted for Claim and ClaimResponse extensions. Corrected in 2.2.0.
-        </li>
-        <li>
-          <a href="https://jira.hl7.org/browse/FHIR-53589" rel="noopener">FHIR-53589</a>:
-          serviceLineNumber moved to the top level of CommunicationRequest. Corrected in 2.2.0.
-        </li>
-      </ul>
-      <p class="note">
-        We found these independently, from the published package and a strict validator, before
-        locating the tickets. Knowing where a mandated version disagrees with itself is the kind of
-        detail that decides whether an integration ships on schedule.
-      </p>
-    </div>
-  </div>
-</section>
-
-<section class="section" aria-labelledby="approach">
-  <div class="container">
-    <h2 id="approach" class="section-title">How we work, visible in the artifact</h2>
-    <ul class="checklist">
-      <li>Pin the version the regulation names, and hold every component to it.</li>
-      <li>Prove conformance with the same public test suite a reviewer would run.</li>
-      <li>Fail closed at the boundary, so bad data never reaches the system of record.</li>
-      <li>Disclose every value the integration adds or changes, down to the field.</li>
-      <li>Document what is simulated, what is real, and what the standard itself got wrong.</li>
-    </ul>
-    <p class="note">
-      X12 renderings in this work are a non-normative educational subset of the public 005010X217
-      and X210 structures. X12's licensed element-level mappings are not reproduced.
-    </p>
   </div>
 </section>
 
@@ -271,11 +43,10 @@
   <div class="container">
     <div class="teaser">
       <div>
-        <h2 id="talk" style="margin-top: 0">Facing the same deadline?</h2>
+        <h2 id="talk" style="margin-top: 0">Want the walkthrough instead?</h2>
         <p>
-          If you are mapping a path from legacy prior authorization to a conformant FHIR API, we are
-          happy to walk through what we learned, including the parts that were harder than the
-          guides suggest.
+          Both prototypes run from the command line and both are built for a live demo. If a
+          screenshot raises a question, the running system answers it.
         </p>
       </div>
       <div class="btn-row">

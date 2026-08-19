@@ -1,0 +1,251 @@
+<section class="section">
+  <div class="container">
+    <p class="crumbs"><a routerLink="/case-studies">Case studies</a></p>
+    <p class="eyebrow">Case study</p>
+    <h1 class="section-title">Zero errors, wrong twice</h1>
+    <p class="lead">
+      We built a working billing pipeline: synthetic radiation oncology treatment events become
+      FHIR R4 ChargeItems, pass a conformance gate, post to a mock EHR endpoint, and then get
+      reconciled row by row against the ledger they came from. The interface logged 412 accepted
+      and zero errors. The reconciliation found the two charges it got wrong anyway.
+    </p>
+
+    <img
+      src="assets/case-studies/chargeitem-reconciliation.png"
+      alt="Pipeline inspector, full-volume reconciliation run: 412 treatment events from the
+        source ledger become 412 FHIR R4 ChargeItems, all pass the conformance gate, all 412 are
+        accepted by the endpoint, and reconciliation against the ledger finds 2 defects. The
+        report shows one missing charge, a 502 that was never retried, and one duplicate, a 504
+        retried without an idempotency key."
+      width="2288"
+      height="910"
+      style="width: 100%; height: auto; border: 1px solid var(--color-border); border-radius: 10px"
+    />
+
+    <dl class="facts" style="margin-top: 2rem">
+      <div>
+        <dt>Standard</dt>
+        <dd>FHIR R4 ChargeItem</dd>
+      </div>
+      <div>
+        <dt>Run</dt>
+        <dd>412 treatment events, 12 synthetic patients</dd>
+      </div>
+      <div>
+        <dt>Verified with</dt>
+        <dd>Full-volume reconciliation against the source ledger</dd>
+      </div>
+      <div>
+        <dt>Work type</dt>
+        <dd>Standfast internal research</dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="problem">
+  <div class="container">
+    <h2 id="problem" class="section-title">The problem</h2>
+    <div class="prose">
+      <p>
+        Every treatment billing interface makes the same promise: what was delivered gets billed,
+        once. But the interface reports on that promise in a vocabulary of accepted and rejected,
+        and billing correctness is not a property of a message. It is a property of the
+        relationship between a charge and the care that was actually delivered, and no message
+        carries that relationship.
+      </p>
+      <p>
+        So the useful question is not whether an interface can produce valid FHIR. It is whether
+        the system around the interface can prove, after every run, that the ledger of delivered
+        care and the ledger of submitted charges are the same ledger. We built a prototype to show
+        what that proof looks like.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="built">
+  <div class="container">
+    <h2 id="built" class="section-title">What the prototype does</h2>
+    <p class="lead">One pipeline, five stages, each one visible in the inspector.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>Reads the source ledger</h3>
+        <p>
+          Synthetic radiation oncology treatment events: delivered fractions and treatment
+          management visits across twelve synthetic patients. The ledger is the ground truth every
+          later stage answers to.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Builds the charge</h3>
+        <p>
+          Each event becomes a FHIR R4 ChargeItem: real CPT codes correctly bound, service dates,
+          quantities, and references back to the treatment record the charge claims to bill.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Gates before transmission</h3>
+        <p>
+          A three-layer conformance gate: structure, terminology, then plausibility. The
+          plausibility layer checks each charge against the treatment actually delivered. Charges
+          that fail are held and named, and never transmitted.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Submits like production</h3>
+        <p>
+          Charges post to a mock EHR FHIR endpoint that fails the way real endpoints fail:
+          502s, timeouts, and slow responses, not just clean acceptances.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Reconciles at full volume</h3>
+        <p>
+          After the run, every row of the source ledger is compared against every accepted charge,
+          in both directions. Nothing is sampled and nothing is assumed.
+        </p>
+      </div>
+    </div>
+
+    <img
+      src="assets/case-studies/chargeitem-gate.png"
+      alt="Pipeline inspector, conformance gate run: three charges arriving from the coding
+        workflow pass structure and terminology checks but fail plausibility, and are quarantined
+        before transmission. The quarantine report lists a quantity of 2 for a day with one
+        delivered fraction, a charge with no delivered treatment record, and a quantity of zero on
+        a billable charge, with the held ChargeItem resource shown as submitted."
+      width="2288"
+      height="1176"
+      style="
+        width: 100%;
+        height: auto;
+        margin-top: 2rem;
+        border: 1px solid var(--color-border);
+        border-radius: 10px;
+      "
+    />
+    <p class="note">
+      Same pipeline, same run. The gate names the violation for every held charge, so a quarantine
+      is attributable to a rule rather than to the gate as a whole.
+    </p>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="silent">
+  <div class="container">
+    <h2 id="silent" class="section-title">Two silent failures the interface reported as success</h2>
+    <div class="prose">
+      <p>
+        The gate passed every charge and the endpoint accepted every submission. The interface
+        logged 412 accepted, zero errors. It was still wrong twice.
+      </p>
+      <p>
+        One delivered IMRT fraction was never billed, because a single 502 was not retried. One
+        treatment management charge was billed twice, because a timeout was retried without an
+        idempotency key. Neither raised an alert, because from the interface's point of view
+        nothing failed. One is missing revenue. The other is an audit finding.
+      </p>
+      <p>
+        Full-volume comparison against the source ledger is what finds them. A ten percent audit
+        sample of this same run would have missed both, with probability 81 percent.
+      </p>
+    </div>
+    <p class="note">
+      The arithmetic: a ten percent sample catches a given single-row failure ten percent of the
+      time, so the chance of missing both independent failures is 0.9 times 0.9.
+    </p>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="gate">
+  <div class="container">
+    <h2 id="gate" class="section-title">
+      Three charges a schema validator accepts and the gate does not
+    </h2>
+    <div class="prose">
+      <p>
+        In a second run, three charges arrive from the coding workflow rather than the delivery
+        record. Each is valid FHIR R4: required elements present, real CPT codes correctly bound,
+        dates that parse, quantities that are non-negative integers. A schema validator passes all
+        three. The gate holds all three, and each is wrong in a way only the treatment record can
+        show.
+      </p>
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>Two units, one fraction</h3>
+        <p>
+          Two units billed for a day on which one fraction was delivered. The quantity is a legal
+          integer. It is also double the care that happened.
+        </p>
+      </div>
+      <div class="card">
+        <h3>A charge with no treatment</h3>
+        <p>
+          A delivery charge for a date with no treatment record behind it. Every field is
+          well-formed. The event it bills never occurred.
+        </p>
+      </div>
+      <div class="card">
+        <h3>A quantity of zero</h3>
+        <p>
+          A billable charge carrying a quantity of zero. The schema permits it, downstream systems
+          each handle it differently, and none of them should ever see it.
+        </p>
+      </div>
+    </div>
+
+    <div class="prose" style="margin-top: 2rem">
+      <p>
+        What makes them wrong is the relationship between the charge and the treatment actually
+        delivered, and that relationship does not exist anywhere in the FHIR structure. No profile
+        can express it, so no validator can check it. The interface has to assert it before
+        transmission, or the charge posts.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="honesty">
+  <div class="container">
+    <h2 id="honesty" class="section-title">Where the line is</h2>
+    <div class="prose">
+      <p>
+        This is a clean-room prototype built on open standards. The data is synthetic, twelve
+        patients who never existed, and the endpoint it submits to is a mock built to behave like
+        a production FHIR server, failure modes included. It contains no protected health
+        information and required no access to any production system.
+      </p>
+      <p>
+        What carries over is the pattern. An unretried 502 and a retry without an idempotency key
+        are not synthetic failure modes. They are the standard ways interfaces lose charges and
+        duplicate them, and full-volume reconciliation against the source ledger is the check that
+        catches both, regardless of whose endpoint is on the other side.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="talk">
+  <div class="container">
+    <div class="teaser">
+      <div>
+        <h2 id="talk" style="margin-top: 0">Does your interface grade its own homework?</h2>
+        <p>
+          If the only system reporting on your billing interface is the interface itself, the
+          failures that cost you are exactly the ones it cannot see. We are happy to walk through
+          what row-by-row reconciliation would look like against your ledger.
+        </p>
+      </div>
+      <div class="btn-row">
+        <a class="btn btn-primary" routerLink="/contact">Start a conversation</a>
+        <a class="btn btn-secondary" routerLink="/case-studies/prior-auth-gateway"
+          >Read the prior auth study</a
+        >
+      </div>
+    </div>
+  </div>
+</section>

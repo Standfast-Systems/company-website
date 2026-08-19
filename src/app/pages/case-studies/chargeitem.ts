@@ -3,23 +3,27 @@ import { Meta } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-case-studies-page',
+  selector: 'app-chargeitem-case-study-page',
   imports: [RouterLink],
-  templateUrl: './case-studies.html',
+  templateUrl: './chargeitem.html',
 })
-export class CaseStudiesPage {
+export class ChargeItemCaseStudyPage {
   constructor() {
     const meta = inject(Meta);
-    const title = 'Case studies | Standfast Systems';
+    const title = 'Zero errors, wrong twice | Standfast Systems';
     const description =
-      'Working clean-room prototypes on open healthcare standards: a Da Vinci PAS conformance gateway verified with Inferno, and a FHIR ChargeItem pipeline proven by full-volume reconciliation.';
-    const image = 'https://standfastsystems.com/assets/case-studies/conformance-board-v4.png';
+      'A working FHIR R4 ChargeItem pipeline logged 412 accepted and zero errors. Full-volume reconciliation against the source ledger found an unbilled treatment and a duplicate charge the interface reported as success.';
+
+    const image = 'https://standfastsystems.com/assets/case-studies/chargeitem-reconciliation.png';
 
     meta.updateTag({ name: 'description', content: description });
     meta.updateTag({ property: 'og:title', content: title });
     meta.updateTag({ property: 'og:description', content: description });
     meta.updateTag({ property: 'og:image', content: image });
-    meta.updateTag({ property: 'og:url', content: 'https://standfastsystems.com/case-studies' });
+    meta.updateTag({
+      property: 'og:url',
+      content: 'https://standfastsystems.com/case-studies/chargeitem-reconciliation',
+    });
     meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
     meta.updateTag({ name: 'twitter:image', content: image });
   }
