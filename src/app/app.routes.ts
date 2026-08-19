@@ -5,6 +5,7 @@ import { CapabilitiesPage } from './pages/capabilities/capabilities';
 import { CaseStudiesPage } from './pages/case-studies/case-studies';
 import { PriorAuthCaseStudyPage } from './pages/case-studies/prior-auth';
 import { ChargeItemCaseStudyPage } from './pages/case-studies/chargeitem';
+import { PftCaseStudyPage } from './pages/case-studies/pft';
 import { InsightsPage } from './pages/insights/insights';
 import { VehiclesPage } from './pages/vehicles/vehicles';
 import { VehicleDetailPage } from './pages/vehicles/vehicle-detail';
@@ -42,6 +43,11 @@ export const routes: Routes = [
     path: 'case-studies/chargeitem-reconciliation',
     component: ChargeItemCaseStudyPage,
     title: 'Case study: ChargeItem reconciliation | Standfast Systems',
+  },
+  {
+    path: 'case-studies/pft-hl7-interface',
+    component: PftCaseStudyPage,
+    title: 'Case study: PFT HL7 interface | Standfast Systems',
   },
   {
     path: 'insights',

@@ -1,0 +1,163 @@
+<section class="section">
+  <div class="container">
+    <p class="crumbs"><a routerLink="/case-studies">Case studies</a></p>
+    <p class="eyebrow">Case study</p>
+    <h1 class="section-title">Structurally valid, physiologically impossible</h1>
+    <p class="lead">
+      We built a vendor-neutral interface that reads a completed pulmonary function study from a
+      PFT vendor's SQL database, builds a conformant HL7 v2.5.1 ORU^R01, and transmits it over
+      MLLP to a mock EHR listener. Then we fed it a study no lung could produce, and the interface
+      refused to send it.
+    </p>
+
+    <dl class="facts" style="margin-top: 2rem">
+      <div>
+        <dt>Standard</dt>
+        <dd>HL7 v2.5.1 ORU^R01 over MLLP</dd>
+      </div>
+      <div>
+        <dt>Terminology</dt>
+        <dd>LOINC and UCUM</dd>
+      </div>
+      <div>
+        <dt>Gate</dt>
+        <dd>Structure, terminology, plausibility</dd>
+      </div>
+      <div>
+        <dt>Work type</dt>
+        <dd>Standfast internal research</dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="problem">
+  <div class="container">
+    <h2 id="problem" class="section-title">The problem</h2>
+    <div class="prose">
+      <p>
+        Pulmonary function labs run on vendor systems that keep results in their own databases.
+        Getting a completed study into the EHR as discrete results rather than a PDF means an
+        interface: SQL out, HL7 in. Most of those interfaces are built as data pipes. If the
+        message parses, it ships.
+      </p>
+      <p>
+        But a PFT result is not just a message. FEV1 is the air a patient moves in the first
+        second of an exhale; FVC is everything they move. FEV1 cannot exceed FVC, and no HL7
+        schema knows that. A pipe that only checks structure will deliver a physiologically
+        impossible result to a chart with a clinician on the other end. The interface has to know
+        what the standard cannot say.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="roundtrip">
+  <div class="container">
+    <h2 id="roundtrip" class="section-title">The round trip</h2>
+    <div class="prose">
+      <p>
+        A completed study, seven results, read from the vendor database without write access. The
+        builder renders it as an ORU^R01 with LOINC-coded observations and UCUM units. The gate
+        checks structure, terminology, and plausibility, and the message goes out over MLLP framed
+        the way the wire actually frames it. The listener acknowledges, and the ACK AA is
+        correlated back to the message control ID it answers. Round trip, end to end, in 14
+        milliseconds.
+      </p>
+    </div>
+
+    <img
+      src="assets/case-studies/pft-roundtrip.png"
+      alt="Pipeline inspector, valid study: a seven-result pulmonary function study is read from
+        the vendor SQL database, built into an HL7 v2.5.1 ORU^R01, passes all three conformance
+        gate checks, is transmitted over MLLP, and the mock EHR listener's ACK AA is correlated
+        back to the message control ID. The data inspector shows the raw ORU^R01 message with
+        LOINC-coded OBX segments."
+      width="1678"
+      height="961"
+      style="
+        width: 100%;
+        height: auto;
+        margin-top: 1.5rem;
+        border: 1px solid var(--color-border);
+        border-radius: 10px;
+      "
+    />
+  </div>
+</section>
+
+<section class="section" aria-labelledby="quarantine">
+  <div class="container">
+    <h2 id="quarantine" class="section-title">The quarantine</h2>
+    <div class="prose">
+      <p>
+        The second study is the same pipeline fed a study that cannot exist. The message it
+        produces is structurally valid HL7: every segment in order, every field well-formed. The
+        gate rejects it twice over. One observation is missing its LOINC code, and FEV1 at 4.10
+        liters exceeds FVC at 3.20 liters, which no set of lungs can do. The message is held for
+        review and never reaches the wire.
+      </p>
+      <p>
+        A generic HL7 validator accepts this message. That is the whole argument. This safeguard
+        is the difference between a data pipe and a clinical-grade interface.
+      </p>
+    </div>
+
+    <img
+      src="assets/case-studies/pft-quarantine.png"
+      alt="Pipeline inspector, clinically impossible study: the same pipeline builds a
+        structurally valid ORU^R01, but the conformance gate fails it on terminology and
+        plausibility: a missing LOINC code, and FEV1 of 4.10 liters exceeding FVC of 3.20 liters.
+        The message is quarantined, held for review, and never transmitted. The gate report notes
+        a generic HL7 validator would have accepted it."
+      width="1684"
+      height="898"
+      style="
+        width: 100%;
+        height: auto;
+        margin-top: 1.5rem;
+        border: 1px solid var(--color-border);
+        border-radius: 10px;
+      "
+    />
+  </div>
+</section>
+
+<section class="section" aria-labelledby="honesty">
+  <div class="container">
+    <h2 id="honesty" class="section-title">Where the line is</h2>
+    <div class="prose">
+      <p>
+        This is a clean-room prototype on open standards: synthetic studies, a vendor-style
+        database schema rather than a vendor's actual schema, and a mock listener standing in for
+        the EHR. No real patient data is used, and nothing here required access to anyone's
+        production system.
+      </p>
+      <p>
+        The pattern is the part that transfers. Read-only source access, a conformance gate that
+        fails closed, terminology bound to LOINC and UCUM, and an acknowledgment correlated to
+        every message it answers: these are the load-bearing pieces of any device-to-EHR
+        interface, whichever vendor is on either end.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="talk">
+  <div class="container">
+    <div class="teaser">
+      <div>
+        <h2 id="talk" style="margin-top: 0">Is your results interface just a pipe?</h2>
+        <p>
+          If a structurally valid message can reach your EHR carrying a result no patient could
+          produce, the gap is in the interface, not the standard. We can walk through what a
+          conformance gate would look like in front of yours.
+        </p>
+      </div>
+      <div class="btn-row">
+        <a class="btn btn-primary" routerLink="/contact">Start a conversation</a>
+        <a class="btn btn-secondary" routerLink="/case-studies">All case studies</a>
+      </div>
+    </div>
+  </div>
+</section>

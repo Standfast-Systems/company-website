@@ -3,23 +3,26 @@ import { Meta } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-case-studies-page',
+  selector: 'app-pft-case-study-page',
   imports: [RouterLink],
-  templateUrl: './case-studies.html',
+  templateUrl: './pft.html',
 })
-export class CaseStudiesPage {
+export class PftCaseStudyPage {
   constructor() {
     const meta = inject(Meta);
-    const title = 'Case studies | Standfast Systems';
+    const title = 'Structurally valid, physiologically impossible | Standfast Systems';
     const description =
-      'Working clean-room prototypes on open healthcare standards: a Da Vinci PAS conformance gateway verified with Inferno, a FHIR ChargeItem pipeline proven by full-volume reconciliation, and a PFT-to-EHR HL7 v2 interface with a clinical plausibility gate.';
-    const image = 'https://standfastsystems.com/assets/case-studies/conformance-board-v4.png';
+      'A vendor-neutral PFT-to-EHR interface: SQL to conformant HL7 v2.5.1 ORU^R01 over MLLP, with a three-layer conformance gate that quarantines a structurally valid message whose FEV1 exceeds its FVC.';
+    const image = 'https://standfastsystems.com/assets/case-studies/pft-quarantine.png';
 
     meta.updateTag({ name: 'description', content: description });
     meta.updateTag({ property: 'og:title', content: title });
     meta.updateTag({ property: 'og:description', content: description });
     meta.updateTag({ property: 'og:image', content: image });
-    meta.updateTag({ property: 'og:url', content: 'https://standfastsystems.com/case-studies' });
+    meta.updateTag({
+      property: 'og:url',
+      content: 'https://standfastsystems.com/case-studies/pft-hl7-interface',
+    });
     meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
     meta.updateTag({ name: 'twitter:image', content: image });
   }
