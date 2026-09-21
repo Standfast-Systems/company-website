@@ -1,0 +1,203 @@
+<section class="section">
+  <div class="container">
+    <p class="crumbs"><a routerLink="/case-studies">Case studies</a></p>
+    <p class="eyebrow">Case study</p>
+    <h1 class="section-title">Turn the old system off with a config flag</h1>
+    <p class="lead">
+      We built a coexistence layer that conforms a legacy HL7 v2 feed into US Core FHIR without
+      touching the source system. Act one: the gate quarantines a screening every generic
+      validator passes. Act two: one config flag retires the legacy intake, and nothing downstream
+      notices.
+    </p>
+
+    <dl class="facts" style="margin-top: 2rem">
+      <div>
+        <dt>Standard</dt>
+        <dd>HL7 v2 to FHIR R4, US Core 7.0.0</dd>
+      </div>
+      <div>
+        <dt>Gate</dt>
+        <dd>Structure, terminology, profile, instrument sum</dd>
+      </div>
+      <div>
+        <dt>Cutover</dt>
+        <dd>One config flag, intake.mode</dd>
+      </div>
+      <div>
+        <dt>Work type</dt>
+        <dd>Standfast internal research</dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="problem">
+  <div class="container">
+    <h2 id="problem" class="section-title">The problem</h2>
+    <div class="prose">
+      <p>
+        A decades-old EHR that every site evolved on its own. Hundreds of bespoke point-to-point
+        interfaces per site, most of them undocumented. And a new EHR standing up alongside it,
+        on a timeline measured in years, while all of those interfaces keep running.
+      </p>
+      <p>
+        The instinct is to treat this as a re-integration project: rebuild every wire against the
+        new system. That is a project that never ends, and it doubles the number of things that
+        can break for the entire transition. The useful question is different. Can a layer sit
+        between the legacy system and its consumers, conform what flows through it, and become the
+        one place the new system plugs in, so that retiring the old one is a configuration change
+        rather than a rebuild? We built that layer and ran it end to end.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="gate">
+  <div class="container">
+    <h2 id="gate" class="section-title">Act one: what a generic validator misses</h2>
+    <div class="prose">
+      <p>
+        The pipeline reads a PHQ-9 depression screening off the legacy HL7 v2 feed, adapts it into
+        a US Core FHIR Observation, and runs it through a four-check gate: structure, terminology,
+        the US Core 7.0.0 profile, and one more that no profile defines. A PHQ-9 total is the sum
+        of its nine item scores. The gate checks that it is.
+      </p>
+      <p>
+        The showpiece message reports a total of 14. Its nine items add up to 21. Structure
+        passes, terminology passes, US Core 7.0.0 passes: a generic FHIR validator accepts this
+        message and posts a wrong score to a patient's mental health record. The instrument-aware
+        check catches it, and the pipeline quarantines it with a precise reason,
+        SEMANTIC_SUM_MISMATCH. Quarantined, not silently dropped, not blindly published. That is
+        the difference between moving data and modernizing a system.
+      </p>
+    </div>
+
+    <img
+      src="assets/case-studies/interop-gate.png"
+      alt="PHQ-9 conformance pipeline for the sum-mismatch scenario: the stage strip shows
+        legacy-capture OK, feed OK, conform FAIL, publish and care-coordination skipped. The
+        conformance gate shows structure OK, terminology OK, us-core-7.0.0 OK, and sum FAIL with
+        the reason Observation total (14) != sum of the 9 item scores (21). The outcome is
+        QUARANTINED with SEMANTIC_SUM_MISMATCH, and the data inspector shows the raw ORU^R01 with
+        LOINC-coded PHQ-9 items."
+      width="1704"
+      height="2772"
+      style="
+        width: 100%;
+        height: auto;
+        margin-top: 1.5rem;
+        border: 1px solid var(--color-border);
+        border-radius: 10px;
+      "
+    />
+  </div>
+</section>
+
+<section class="section" aria-labelledby="flip">
+  <div class="container">
+    <h2 id="flip" class="section-title">Act two: retire the source system with a config flag</h2>
+    <div class="prose">
+      <p>
+        Today, every consumer of the legacy system's data has its own bespoke wire, and the
+        clinical app that captures the screening is welded to that system. Coexistence changes
+        the shape without changing the source of record: the legacy feed drops into a FHIR hub,
+        the hub conforms, gates, and publishes one event, and both EHRs receive the result on
+        their own return legs. The legacy system does not know anything happened.
+      </p>
+      <p>
+        Then the cutover. One configuration value, intake.mode, flips from legacy to direct. The
+        feed poller goes dark, the legacy system is retired as the intake middleman, and the same
+        clinical app sends the same ORU^R01 straight to the hub. Same parser, same gate, same
+        event, same consumers. Nothing downstream changes, because nothing downstream was ever
+        wired to the legacy system in the first place.
+      </p>
+    </div>
+
+    <img
+      src="assets/case-studies/interop-flip.png"
+      alt="The cutover tour at step 3 of 5, the flip, with intake.mode reading direct. The diagram
+        shows the legacy EHR intake retired and the legacy HL7 feed poller dark, while the
+        unchanged clinical app sends the same ORU^R01 directly to the FHIR hub, which still feeds
+        the EHR stand-in, consumers, and a return path to the legacy EHR over MLLP and to the
+        target EHR. An alert reads The feed is dark: the watched directory is no longer polled and
+        the direct link is the only active feeder."
+      width="1640"
+      height="1140"
+      style="
+        width: 100%;
+        height: auto;
+        margin-top: 1.5rem;
+        border: 1px solid var(--color-border);
+        border-radius: 10px;
+      "
+    />
+
+    <div class="prose" style="margin-top: 2rem">
+      <p>
+        The proof is one patient, two routes, one platform. The screening that traveled through
+        the legacy system and the one that bypassed it land as the same US Core Observation, on
+        the same trend, behind the same read API, with the same care flags and the same deliveries.
+        And during coexistence, the legacy system keeps receiving results on the return leg until
+        it is fully retired. Turning it off becomes configuration, not a project.
+      </p>
+    </div>
+
+    <img
+      src="assets/case-studies/interop-proof.png"
+      alt="The cutover tour at step 5 of 5, the proof. The patient now has 2 screenings on one
+        trend, including both of the tour's routes. Two FHIR Observations are shown side by side,
+        one via the legacy EHR and one direct with no legacy EHR: both carry the US Core
+        screening-assessment profile, LOINC 44261-6 PHQ-9 total score, and the same patient
+        reference, differing only in their scores."
+      width="1640"
+      height="1870"
+      style="
+        width: 100%;
+        height: auto;
+        margin-top: 1.5rem;
+        border: 1px solid var(--color-border);
+        border-radius: 10px;
+      "
+    />
+  </div>
+</section>
+
+<section class="section" aria-labelledby="honesty">
+  <div class="container">
+    <h2 id="honesty" class="section-title">Where the line is</h2>
+    <div class="prose">
+      <p>
+        This is a clean-room prototype on open standards. The screenings are synthetic. Both EHRs
+        are in-process stand-ins: a mock MLLP listener on the legacy side and a mock FHIR endpoint
+        on the target side. The flip is a live toggle for the sake of the walkthrough; in
+        production it is a configuration change deployed like any other.
+      </p>
+      <p>
+        It is also deliberately one slice. This is the conformance and interoperability core, not
+        the enterprise interface catalog, the governance model, or the cost model that a full
+        modernization needs around it. What transfers is the pattern: conform at the publish
+        boundary, strangle one interface at a time behind a canonical model, and make retirement a
+        configuration change you can prove instead of a rebuild you have to hope for.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="talk">
+  <div class="container">
+    <div class="teaser">
+      <div>
+        <h2 id="talk" style="margin-top: 0">Is your modernization a rebuild in disguise?</h2>
+        <p>
+          If retiring your legacy system means re-integrating every consumer, the coupling is the
+          project. We can walk through what a coexistence layer would look like in front of your
+          feed, one interface at a time.
+        </p>
+      </div>
+      <div class="btn-row">
+        <a class="btn btn-primary" routerLink="/contact">Start a conversation</a>
+        <a class="btn btn-secondary" routerLink="/case-studies">All case studies</a>
+      </div>
+    </div>
+  </div>
+</section>

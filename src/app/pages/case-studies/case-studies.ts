@@ -12,7 +12,7 @@ export class CaseStudiesPage {
     const meta = inject(Meta);
     const title = 'Case studies | Standfast Systems';
     const description =
-      'Working clean-room prototypes on open healthcare standards: a Da Vinci PAS conformance gateway verified with Inferno, a FHIR ChargeItem pipeline proven by full-volume reconciliation, and a PFT-to-EHR HL7 v2 interface with a clinical plausibility gate.';
+      'Working clean-room prototypes on open healthcare standards: a Da Vinci PAS conformance gateway verified with Inferno, a FHIR ChargeItem pipeline proven by full-volume reconciliation, a PFT-to-EHR HL7 v2 interface with a clinical plausibility gate, and a coexistence layer that retires a legacy EHR intake with one config flag.';
     const image = 'https://standfastsystems.com/assets/case-studies/conformance-board-v4.png';
 
     meta.updateTag({ name: 'description', content: description });

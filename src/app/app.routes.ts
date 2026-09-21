@@ -6,6 +6,7 @@ import { CaseStudiesPage } from './pages/case-studies/case-studies';
 import { PriorAuthCaseStudyPage } from './pages/case-studies/prior-auth';
 import { ChargeItemCaseStudyPage } from './pages/case-studies/chargeitem';
 import { PftCaseStudyPage } from './pages/case-studies/pft';
+import { InteropCaseStudyPage } from './pages/case-studies/interop';
 import { InsightsPage } from './pages/insights/insights';
 import { VehiclesPage } from './pages/vehicles/vehicles';
 import { VehicleDetailPage } from './pages/vehicles/vehicle-detail';
@@ -48,6 +49,11 @@ export const routes: Routes = [
     path: 'case-studies/pft-hl7-interface',
     component: PftCaseStudyPage,
     title: 'Case study: PFT HL7 interface | Standfast Systems',
+  },
+  {
+    path: 'case-studies/coexistence-cutover',
+    component: InteropCaseStudyPage,
+    title: 'Case study: Coexistence to cutover | Standfast Systems',
   },
   {
     path: 'insights',
