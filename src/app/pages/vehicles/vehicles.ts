@@ -23,11 +23,11 @@ export class VehiclesPage implements OnInit {
   // Section order on the page. Owner group comes from the snapshot; anything
   // unlabelled lands in Government-wide so it never vanishes.
   readonly SECTIONS: { key: VehicleGroup; label: string; hint: string }[] = [
-    { key: 'VA', label: 'VA vehicles', hint: 'VA-held IDIQs: T4NG, CEDAR and SPRUCE, IHT, EHRM' },
+    { key: 'VA', label: 'VA vehicles', hint: 'IDIQs the Department of Veterans Affairs holds itself' },
     {
       key: 'Gov-wide',
       label: 'Government-wide vehicles',
-      hint: 'GSA schedules and GWACs: Alliant 2, VETS 2, SEWP V, CIO-SP3',
+      hint: 'GSA and NASA schedules and GWACs, with orders from every agency',
     },
   ];
   // Within a section, iterations of one program stay adjacent (T4 -> T4NG -> T4NG2):
