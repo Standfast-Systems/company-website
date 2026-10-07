@@ -4,9 +4,13 @@ import { Injectable } from '@angular/core';
 // research pipeline (landscape-safe columns only; the exporter is purity-tested).
 // No server, no live API, nothing writable.
 
+export type VehicleGroup = 'VA' | 'Gov-wide';
 export interface VehicleRow {
   vehicle: string; slug: string; orders_n: number; primes: number; total: number;
   active: number; sub_flow: number; pods_mapped: number;
+  // Owner group and program lineage (T4 -> T4NG -> T4NG2, gen is the 0-based position).
+  // Optional so a snapshot exported before these fields existed still renders.
+  group?: VehicleGroup; lineage?: string; gen?: number;
 }
 export interface Seat {
   company: string; orders_n: number; total: number; active: number;

@@ -8,36 +8,43 @@
 
     @if (err()) { <div class="banner-err" role="alert">{{ err() }}</div> }
 
-    <div class="table-scroll">
-      <table class="vt">
-        <thead>
-          <tr>
-            <th scope="col">Vehicle</th>
-            <th scope="col" class="num">Orders</th>
-            <th scope="col" class="num">Primes</th>
-            <th scope="col" class="num">Total $</th>
-            <th scope="col" class="num">Active</th>
-            <th scope="col" class="num">$ &rarr; subs</th>
-            <th scope="col" class="num">Teams mapped</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (v of rows(); track v.slug) {
-            <tr class="clickable" (click)="open(v)">
-              <td class="title">
-                <a [routerLink]="['/vehicles', v.slug]" (click)="$event.stopPropagation()">{{ v.vehicle }}</a>
-              </td>
-              <td class="num">{{ v.orders_n }}</td>
-              <td class="num">{{ v.primes }}</td>
-              <td class="num">{{ fmtMoney(v.total) }}</td>
-              <td class="num">{{ v.active || '' }}</td>
-              <td class="num">{{ v.sub_flow ? fmtMoney(v.sub_flow) : '' }}</td>
-              <td class="num muted">{{ v.pods_mapped || '' }}</td>
+    @for (s of sections(); track s.key) {
+      <h2 class="vt-section">
+        {{ s.label }} ({{ s.rows.length }})
+        <span class="muted">{{ s.hint }}</span>
+      </h2>
+      <div class="table-scroll">
+        <table class="vt">
+          <thead>
+            <tr>
+              <th scope="col">Vehicle</th>
+              <th scope="col" class="num">Orders</th>
+              <th scope="col" class="num">Primes</th>
+              <th scope="col" class="num">Total $</th>
+              <th scope="col" class="num">Active</th>
+              <th scope="col" class="num">$ &rarr; subs</th>
+              <th scope="col" class="num">Teams mapped</th>
             </tr>
-          }
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            @for (v of s.rows; track v.slug) {
+              <tr class="clickable" (click)="open(v)">
+                <td class="title">
+                  @if (continues(v)) { <span class="muted vt-continues">&#8627; </span> }
+                  <a [routerLink]="['/vehicles', v.slug]" (click)="$event.stopPropagation()">{{ v.vehicle }}</a>
+                </td>
+                <td class="num">{{ v.orders_n }}</td>
+                <td class="num">{{ v.primes }}</td>
+                <td class="num">{{ fmtMoney(v.total) }}</td>
+                <td class="num">{{ v.active || '' }}</td>
+                <td class="num">{{ v.sub_flow ? fmtMoney(v.sub_flow) : '' }}</td>
+                <td class="num muted">{{ v.pods_mapped || '' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
     @if (generatedAt()) {
       <p class="note">
         Snapshot generated {{ generatedAt() }}. "$ &rarr; subs" is FSRS-reported subcontract value.

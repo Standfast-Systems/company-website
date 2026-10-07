@@ -504,6 +504,21 @@ ul.checklist li::before {
   font-size: 0.9rem;
 }
 
+.vt-section {
+  font-size: 1.05rem;
+  margin: 2rem 0 0;
+}
+
+.vt-section .muted {
+  font-weight: 400;
+  font-size: 0.85rem;
+  margin-left: 0.6rem;
+}
+
+.vt-continues {
+  padding-left: 0.9rem;
+}
+
 .table-scroll {
   overflow-x: auto;
   margin-top: 1.5rem;
