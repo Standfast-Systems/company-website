@@ -358,6 +358,23 @@ img {
   vertical-align: middle;
 }
 
+.teaser-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+.teaser-grid .teaser {
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 0;
+}
+
+.teaser-grid .teaser h3 {
+  margin-top: 0;
+}
+
 /* Content pages */
 
 .prose {

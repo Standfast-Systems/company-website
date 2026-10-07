@@ -12,6 +12,7 @@ import { VehiclesPage } from './pages/vehicles/vehicles';
 import { VehicleDetailPage } from './pages/vehicles/vehicle-detail';
 import { VehicleOrdersPage } from './pages/vehicles/vehicle-orders';
 import { ContactPage } from './pages/contact/contact';
+import { GuardrailPage } from './pages/guardrail/guardrail';
 import { NotFoundPage } from './pages/not-found/not-found';
 
 export const routes: Routes = [
@@ -79,6 +80,11 @@ export const routes: Routes = [
     path: 'contact',
     component: ContactPage,
     title: 'Contact | Standfast Systems',
+  },
+  {
+    path: 'sf-guardrail',
+    component: GuardrailPage,
+    title: 'Standfast Guardrail | Standfast Systems',
   },
   {
     path: '**',

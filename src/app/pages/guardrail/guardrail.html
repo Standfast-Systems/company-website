@@ -1,0 +1,266 @@
+<section class="section">
+  <div class="container">
+    <p class="eyebrow">Free tool</p>
+    <h1 class="section-title">Standfast Guardrail</h1>
+    <p class="lead" style="color: var(--color-white); font-weight: 600; margin-bottom: 1.25rem">
+      Onboarding checks a connection once. Guardrail checks it every day.
+    </p>
+    <div class="prose">
+      <p>
+        Every source feeding a health information exchange drifts. An EHR upgrade moves a field, a
+        lab starts reusing MRNs, a front desk starts typing birthdates as free text. Nobody sends
+        bad data on purpose, and nobody gets told. The records just land in the review queue.
+      </p>
+      <p>
+        Standfast Guardrail watches each source's feed every day and tells your team which source
+        changed, what changed, and what it's likely to cost in manual review. It runs inside your
+        environment, reads a copy of the feed, and keeps no raw PHI.
+      </p>
+    </div>
+    <div class="btn-row" style="margin-top: 1.5rem">
+      <a class="btn btn-primary" routerLink="/contact">Start a conversation</a>
+      <a class="btn btn-secondary" href="#runs">How it runs</a>
+      <!-- Add when the walkthrough is recorded and the repo is public:
+      <a class="btn btn-secondary" href="WALKTHROUGH_URL" rel="noopener">Watch the walkthrough</a>
+      <a class="btn btn-secondary" href="https://github.com/Standfast-Systems/sf-guardrail" rel="noopener">View on GitHub</a>
+      -->
+    </div>
+
+    <dl class="facts" style="margin-top: 2.5rem">
+      <div>
+        <dt>Standard</dt>
+        <dd>HL7 v2 ADT and ORU</dd>
+      </div>
+      <div>
+        <dt>Runs</dt>
+        <dd>Inside your environment</dd>
+      </div>
+      <div>
+        <dt>Keeps</dt>
+        <dd>Counts, patterns, salted hashes</dd>
+      </div>
+      <div>
+        <dt>Cost</dt>
+        <dd>Free</dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="problem">
+  <div class="container">
+    <h2 id="problem" class="section-title">The problem</h2>
+    <div class="prose">
+      <p>
+        Onboarding a source is careful work. Someone reads the spec, maps the fields, runs the test
+        messages, and signs off. Then the connection runs for years, and the only time anyone looks
+        at it that hard again is an audit.
+      </p>
+      <p>
+        Between those two moments the source changes. An EHR upgrade ships. A lab reuses a block
+        of MRNs. A front desk starts typing birthdates as free text because the new form let them.
+        None of it is anyone's fault, and none of it is announced. The records just land in the
+        manual-review queue, where the cost shows up weeks later as a number nobody can trace back
+        to a source.
+      </p>
+      <p>
+        The dashboards most exchanges already run show the trend. What they leave to people is the
+        loop: which source, what changed, what it's likely to cost, and whether the fix actually
+        landed. Guardrail is built for that loop. It was built against the NC HealthConnex Data
+        Target v3.2, and it generalizes to any exchange that publishes one.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="does">
+  <div class="container">
+    <h2 id="does" class="section-title">What it does</h2>
+    <p class="lead">Every source, every day, compared against its own history.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>Checks every message</h3>
+        <p>
+          Each message is checked against the exchange's data target and a set of plausibility
+          rules: placeholder names, default or free-text dates of birth, an SSN sent as the MRN,
+          codes outside their sets. Every finding carries text, never color alone.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Compares today with the baseline</h3>
+        <p>
+          Each feed is profiled as counts and format patterns and compared with its own learned
+          baseline, so an EHR upgrade, MRN reuse, or a source going quiet shows up the day it
+          starts. A flu surge can be marked expected and stays quiet.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Estimates the review cost</h3>
+        <p>
+          A transparent stand-in matcher follows the hub's published method and charges each
+          likely review-queue addition to a source and a cause. It's an estimate, labeled as one,
+          and it's the number that turns a finding into a priority.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Writes the fix, tracks the fix</h3>
+        <p>
+          A one-page fix report per source, in the source's own terms: what changed, what it
+          likely means at the source, the data target line, and the fix. The tracker follows each
+          issue until the feed itself shows the fix. Only the feed can mark an issue verified.
+        </p>
+      </div>
+    </div>
+
+    <img src="assets/sf-guardrail/2-hub-sources.png"
+      alt="Source table with status tags, open findings and estimated review cost per day"
+      width="1920" height="1594"
+      style="width: 100%; height: auto; margin-top: 2rem; border: 1px solid var(--color-border); border-radius: 10px" />
+    <p class="note">Every source's status and estimated daily cost. Status always carries text, never color alone.</p>
+    <img src="assets/sf-guardrail/3-hub-review-chart.png"
+      alt="Daily review-queue additions chart with incident markers"
+      width="1920" height="946"
+      style="width: 100%; height: auto; margin-top: 2rem; border: 1px solid var(--color-border); border-radius: 10px" />
+    <p class="note">The review-queue cost of drift, with incidents as dashed markers. The toggle switches to watched monthly.</p>
+    <img src="assets/sf-guardrail/6-fix-report.png"
+      alt="Fix report for Piedmont Family Medicine"
+      width="1664" height="3000"
+      style="width: 100%; height: auto; margin-top: 2rem; border: 1px solid var(--color-border); border-radius: 10px" />
+    <p class="note">The one-page fix report, with the estimated cost and restore to matching.</p>
+    <img src="assets/sf-guardrail/7-tracker.png"
+      alt="Tracker with source 6 verified and flagged restore to matching"
+      width="1920" height="3038"
+      style="width: 100%; height: auto; margin-top: 2rem; border: 1px solid var(--color-border); border-radius: 10px" />
+    <p class="note">The tracker. Only the feed can mark an issue verified.</p>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="day">
+  <div class="container">
+    <h2 id="day" class="section-title">One day, in detail</h2>
+    <div class="prose">
+      <p>
+        Day 45 of the demo, a Tuesday. Piedmont Family Medicine, a synthetic ambulatory practice,
+        has sent a clean feed for six weeks. Overnight its EHR is upgraded, and the next morning's
+        206 messages carry four changes at once: a new sending facility, PFM0006 to PFM-EPX; a new
+        assigning authority, PFM to PFMX; a new MRN format, NNNNNNN to AAA-NNNNNNN; and sex codes
+        that switched from F and M to 2 and 1. Every one of the 206 messages is affected. Every
+        one is still valid HL7.
+      </p>
+      <p>
+        Guardrail raises all four the same day. Every returning patient now arrives with an
+        identifier the hub has never seen, so none of them link deterministically. They drop to
+        probabilistic matching, the sex codes no longer agree, and they go to review. The fix
+        report puts the cost at about 24 records a day added to the manual-review queue, labeled
+        as the estimate it is, and names the fix: map the new facility code and assigning
+        authority back to the old ones at the interface, keep the MRN format, and ask the hub to
+        restore the source's records to matching.
+      </p>
+      <p>
+        The remap lands on day 75. The feed shows it, the four findings resolve, and on day 77 the
+        tracker marks the issue verified. Not because someone closed a ticket. Because the data
+        moved. A monthly dashboard would have seen the change on December 1, three weeks later.
+      </p>
+    </div>
+
+    <img src="assets/sf-guardrail/5-finding-msh4-before-after.png"
+      alt="MSH-4 finding detail: PFM0006 to PFM-EPX with guidance"
+      width="1920" height="2288"
+      style="width: 100%; height: auto; margin-top: 1.5rem; border: 1px solid var(--color-border); border-radius: 10px" />
+    <p class="note">
+      All of it is synthetic: eight fictional sources, 90 days, one story. No real feed was used.
+    </p>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="runs">
+  <div class="container">
+    <h2 id="runs" class="section-title">How it runs</h2>
+    <div class="prose">
+      <p>
+        Guardrail reads a copy of the feed: a copy of the SFTP drops, a mirror of the incoming
+        connection, or the message archive. It runs on its own host inside the exchange's
+        environment and is never in the delivery path. If Guardrail stops, nothing else stops. It
+        makes no queries against the EMPI and no writes anywhere, not to the hub, not to the
+        sources, not to the feed.
+      </p>
+      <p>
+        What it keeps is deliberately small: daily counts per source, format patterns, the most
+        frequent code values per field, salted hashes of the identifiers it needs to notice reuse,
+        and the findings themselves. It never keeps message text, names, addresses, phone numbers,
+        SSNs, or raw MRNs, and a date of birth survives only as a salted hash. The one exception
+        is documented rather than hidden: when a source mis-maps free text into a coded field, up
+        to twenty of those values per field per day are stored so the drift can be reported.
+        Guardrail flags that the day it starts, and the security document that ships with the
+        code says exactly how it works.
+      </p>
+      <p>
+        A statewide day, about 2 million messages from 20,000 sources, is checked and profiled in
+        under 30 seconds on one laptop-class machine. It counts as the feed flows by; it never pins
+        a CPU.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="not">
+  <div class="container">
+    <h2 id="not" class="section-title">What it doesn't do</h2>
+    <div class="prose">
+      <p>
+        Guardrail stops the drift and the defaults. The ambiguous pairs stay with your reviewers:
+        a typo that is still a real date, a plausible name on the wrong record, the single wrong
+        value that only a person can call. Nothing here matches, fixes, or rebuilds anything in
+        production, and nothing writes back.
+      </p>
+      <p>
+        It complements the hub's EMPI and its data-quality dashboards. It doesn't replace them.
+        The EMPI matches, the dashboards show the trend, and Guardrail watches each feed before
+        the EMPI sees it, so the people on both ends find out the day something changed instead of
+        the month after.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="free">
+  <div class="container">
+    <h2 id="free" class="section-title">Why it's free</h2>
+    <div class="prose">
+      <p>
+        Guardrail is free because it was built to be useful. It was built from the outside, from
+        the specifications and material an exchange publishes, and the thing we want from it is to
+        see it run in production on a real feed.
+      </p>
+      <p>
+        There is one more reason, and it sets the tone of every line the tool writes. Nobody is
+        treated as a bad actor. An upgrade ships, a field moves, and the people on both ends find
+        out weeks later. Making the feeds easier to measure, monitor, and manage means everyone can
+        do the right thing sooner. That is worth giving away.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="talk">
+  <div class="container">
+    <div class="teaser">
+      <div>
+        <h2 id="talk" style="margin-top: 0">Let's talk.</h2>
+        <p>
+          If you run an exchange and want to see Guardrail against synthetic data in your own test
+          environment, run by your own staff, that is a twenty-minute conversation.
+        </p>
+      </div>
+      <div class="btn-row">
+        <a class="btn btn-primary" routerLink="/contact">Start a conversation</a>
+        <!-- Add when available:
+        <a class="btn btn-secondary" href="WALKTHROUGH_URL" rel="noopener">Watch the walkthrough</a>
+        <a class="btn btn-secondary" href="https://github.com/Standfast-Systems/sf-guardrail" rel="noopener">View on GitHub</a>
+        <a class="btn btn-secondary" href="https://github.com/Standfast-Systems/sf-guardrail/blob/main/docs/security.md" rel="noopener">Security</a>
+        -->
+      </div>
+    </div>
+  </div>
+</section>
