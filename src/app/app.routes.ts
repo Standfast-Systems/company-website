@@ -7,6 +7,7 @@ import { PriorAuthCaseStudyPage } from './pages/case-studies/prior-auth';
 import { ChargeItemCaseStudyPage } from './pages/case-studies/chargeitem';
 import { PftCaseStudyPage } from './pages/case-studies/pft';
 import { InteropCaseStudyPage } from './pages/case-studies/interop';
+import { AiModernizationCaseStudyPage } from './pages/case-studies/ai-modernization';
 import { InsightsPage } from './pages/insights/insights';
 import { VehiclesPage } from './pages/vehicles/vehicles';
 import { VehicleDetailPage } from './pages/vehicles/vehicle-detail';
@@ -55,6 +56,11 @@ export const routes: Routes = [
     path: 'case-studies/coexistence-cutover',
     component: InteropCaseStudyPage,
     title: 'Case study: Coexistence to cutover | Standfast Systems',
+  },
+  {
+    path: 'case-studies/ai-assisted-modernization',
+    component: AiModernizationCaseStudyPage,
+    title: 'Case study: More output, less new code | Standfast Systems',
   },
   {
     path: 'insights',

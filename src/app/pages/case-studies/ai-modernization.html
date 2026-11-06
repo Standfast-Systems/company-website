@@ -1,0 +1,307 @@
+<section class="section">
+  <div class="container">
+    <p class="crumbs"><a routerLink="/case-studies">Case studies</a></p>
+    <p class="eyebrow">Case study</p>
+    <h1 class="section-title">More output, less new code</h1>
+    <p class="lead">
+      Work done as a Staff Software Engineer at Total Quality Logistics, not a Standfast Systems
+      engagement. AI-assisted delivery on a behind-schedule enterprise modernization, directed by
+      judgment and measured sprint by sprint.
+    </p>
+
+    <dl class="facts" style="margin-top: 2rem">
+      <div>
+        <dt>Role</dt>
+        <dd>Staff Software Engineer, Total Quality Logistics</dd>
+      </div>
+      <div>
+        <dt>Program</dt>
+        <dd>Dispatch modernization, five teams, two shared codebases</dd>
+      </div>
+      <div>
+        <dt>Measured</dt>
+        <dd>13 two-week sprints, Azure DevOps and GitHub</dd>
+      </div>
+      <div>
+        <dt>Work type</dt>
+        <dd>Employee work, not a Standfast Systems build</dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="situation">
+  <div class="container">
+    <h2 id="situation" class="section-title">The situation</h2>
+    <div class="prose">
+      <p>
+        A behind-schedule, multi-year modernization of the Dispatch system at the core of TQL's
+        freight brokerage. Five teams delivered vertical slices across two shared codebases. The
+        team was engineers new to modernization plus a group of near-shore contractors.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="did">
+  <div class="container">
+    <h2 id="did" class="section-title">What we did</h2>
+    <div class="prose">
+      <p>
+        The other staff engineers and I built an AI code-review assistant into our infrastructure,
+        wired into Azure DevOps tickets, the engineering handbook and project-level details. I led
+        the weekly sync with the other team leads that kept it aimed at what the modernization
+        actually needed. It let the senior reviewers focus on the changes that mattered, and it
+        widened what counted as boilerplate enough that we could go faster without just making a
+        bigger mess.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="result">
+  <div class="container">
+    <h2 id="result" class="section-title">The result</h2>
+    <div class="prose">
+      <p>
+        Over roughly six months, sustained sprint velocity rose about 1.5× and held, peaking at
+        more than double where it started. Defect rates stayed flat. The program reached
+        development-complete on schedule while absorbing another team's scope.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="data">
+  <div class="container">
+    <h2 id="data" class="section-title">What the data shows</h2>
+    <div class="prose">
+      <p>
+        Code volume spiked early, while AI capacity went into refactoring and paying down inherited
+        technical debt. Then it fell, while delivered velocity kept climbing. More output on less
+        new code only happens when AI capacity is directed by judgment.
+      </p>
+    </div>
+
+    <figure class="chart-figure" style="margin: 2rem 0 0">
+      <div
+        style="
+          overflow-x: auto;
+          background: var(--color-surface);
+          border: 1px solid var(--color-border);
+          border-radius: 10px;
+          padding: 1rem;
+        "
+      >
+        <svg
+          [attr.viewBox]="'0 0 ' + width + ' ' + height"
+          role="img"
+          aria-labelledby="chart-title"
+          style="display: block; width: 100%; min-width: 640px; height: auto"
+        >
+          <title id="chart-title">
+            Completed story points and net code volume per sprint across 13 two-week sprints.
+            Story points rise from 32 to a peak of 75 in sprint 26.11 and end at 70. Net code
+            volume rises to a peak of about 93,000 lines in sprint 26.06, then falls to about
+            20,000.
+          </title>
+
+          <!-- legend -->
+          <rect
+            [attr.x]="margin.left"
+            y="14"
+            width="14"
+            height="14"
+            rx="2"
+            fill="var(--color-accent-dim)"
+          />
+          <text [attr.x]="margin.left + 22" y="26" fill="var(--color-light)" font-size="13">
+            Completed story points (left axis)
+          </text>
+          <line
+            [attr.x1]="margin.left + 260"
+            y1="21"
+            [attr.x2]="margin.left + 284"
+            y2="21"
+            stroke="var(--color-white)"
+            stroke-width="3"
+          />
+          <circle [attr.cx]="margin.left + 272" cy="21" r="4" fill="var(--color-white)" />
+          <text [attr.x]="margin.left + 294" y="26" fill="var(--color-light)" font-size="13">
+            Net code volume, lines (right axis)
+          </text>
+
+          <!-- grid and axes -->
+          @for (t of ticks; track t.y) {
+            <line
+              [attr.x1]="margin.left"
+              [attr.x2]="margin.left + plotW"
+              [attr.y1]="t.y"
+              [attr.y2]="t.y"
+              stroke="var(--color-border)"
+              stroke-width="1"
+            />
+            <text
+              [attr.x]="margin.left - 10"
+              [attr.y]="t.y + 4"
+              text-anchor="end"
+              fill="var(--color-gray)"
+              font-size="12"
+            >
+              {{ t.left }}
+            </text>
+            <text
+              [attr.x]="margin.left + plotW + 10"
+              [attr.y]="t.y + 4"
+              fill="var(--color-gray)"
+              font-size="12"
+            >
+              {{ t.right }}
+            </text>
+          }
+
+          <!-- bars -->
+          @for (b of bars; track b.label) {
+            <rect
+              [attr.x]="b.x"
+              [attr.y]="b.y"
+              [attr.width]="barW"
+              [attr.height]="b.h"
+              rx="2"
+              fill="var(--color-accent-dim)"
+              opacity="0.85"
+            />
+            <text
+              [attr.x]="b.cx"
+              [attr.y]="b.y - 6"
+              text-anchor="middle"
+              fill="var(--color-gray)"
+              font-size="11"
+            >
+              {{ b.points }}
+            </text>
+            <text
+              [attr.x]="b.cx"
+              [attr.y]="baseY + 20"
+              text-anchor="middle"
+              fill="var(--color-light)"
+              font-size="12"
+            >
+              {{ b.label }}
+            </text>
+            <text
+              [attr.x]="b.cx"
+              [attr.y]="baseY + 35"
+              text-anchor="middle"
+              fill="var(--color-gray)"
+              font-size="10"
+            >
+              {{ b.weeks }}
+            </text>
+          }
+
+          <!-- line -->
+          <path
+            [attr.d]="linePath"
+            fill="none"
+            stroke="var(--color-white)"
+            stroke-width="3"
+            stroke-linejoin="round"
+          />
+          @for (d of dots; track d.cx) {
+            <circle
+              [attr.cx]="d.cx"
+              [attr.cy]="d.cy"
+              r="4.5"
+              fill="var(--color-white)"
+              stroke="var(--color-surface)"
+              stroke-width="1.5"
+            />
+          }
+
+          <!-- annotation at the code-volume peak -->
+          <text
+            [attr.x]="peak.cx - 16"
+            [attr.y]="peak.cy - 2"
+            text-anchor="end"
+            fill="var(--color-accent)"
+            font-size="13"
+          >
+            AI capacity ramps:
+          </text>
+          <text
+            [attr.x]="peak.cx - 16"
+            [attr.y]="peak.cy + 15"
+            text-anchor="end"
+            fill="var(--color-accent)"
+            font-size="13"
+          >
+            refactoring and tech-debt paydown.
+          </text>
+
+          <text
+            [attr.x]="margin.left + plotW / 2"
+            [attr.y]="height - 6"
+            text-anchor="middle"
+            fill="var(--color-gray)"
+            font-size="12"
+          >
+            Sprint (ISO weeks)
+          </text>
+        </svg>
+      </div>
+      <figcaption class="muted" style="margin-top: 0.75rem; font-size: 0.9rem">
+        Completed story points and net code volume per sprint, from Azure DevOps and GitHub. One
+        sprint's code volume adjusted to exclude a generated-file batch; final sprint partial.
+      </figcaption>
+    </figure>
+
+    <details style="margin-top: 1.25rem">
+      <summary class="muted" style="cursor: pointer">Chart data as a table</summary>
+      <div style="overflow-x: auto; margin-top: 0.75rem">
+        <table style="border-collapse: collapse; width: 100%; font-size: 0.9rem">
+          <thead>
+            <tr>
+              <th scope="col" style="text-align: left; padding: 0.4rem 0.75rem">Sprint</th>
+              <th scope="col" style="text-align: left; padding: 0.4rem 0.75rem">ISO weeks</th>
+              <th scope="col" style="text-align: right; padding: 0.4rem 0.75rem">Story points</th>
+              <th scope="col" style="text-align: right; padding: 0.4rem 0.75rem">
+                Net code volume (lines)
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (s of sprints; track s.label) {
+              <tr style="border-top: 1px solid var(--color-border)">
+                <th scope="row" style="text-align: left; padding: 0.4rem 0.75rem">
+                  {{ s.label }}
+                </th>
+                <td style="padding: 0.4rem 0.75rem">{{ s.weeks }}</td>
+                <td style="text-align: right; padding: 0.4rem 0.75rem">{{ s.points }}</td>
+                <td style="text-align: right; padding: 0.4rem 0.75rem">{{ fmt(s.lines) }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </details>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="talk">
+  <div class="container">
+    <div class="teaser">
+      <div>
+        <h2 id="talk" style="margin-top: 0">Modernization already behind?</h2>
+        <p>
+          AI capacity only pays off when someone directs it at the right work. If your review
+          queue is the bottleneck, let's talk about where it's going.
+        </p>
+      </div>
+      <div class="btn-row">
+        <a class="btn btn-primary" routerLink="/contact">Start a conversation</a>
+        <a class="btn btn-secondary" routerLink="/case-studies">All case studies</a>
+      </div>
+    </div>
+  </div>
+</section>
